@@ -20,15 +20,29 @@ except ModuleNotFoundError:
 	au.close()
 	import auth
 
+
 PATH = "C:\Program Files (x86)\chromedriver.exe" 
 driver = webdriver.Chrome(PATH)
-driver.get("https://pixelpad.io/wp-login.php")
 
-emailfield = driver.find_element_by_name("log")
-passfield = driver.find_element_by_name("pwd")
-emailfield.send_keys(auth.name)
-passfield.send_keys(auth.pw)
+def get_element(by_type, flag):
+	try:
+		return WebDriverWait(driver, 10).until(
+			EC.presence_of_element_located((by_type, flag)))
 
-passfield.send_keys(Keys.RETURN)
+	except:
+		raise
+	
+driver.get("https://pixelpad.io")
 
+try:
+	elem = get_element(By.ID, "pixelpad_login")
+	elem.click()
+	emailfield = get_element(By.ID, "login_username")
+	passfield = get_element(By.ID, "login_password")
+	emailfield.send_keys(auth.name)
+	passfield.send_keys(auth.pwd)
+	passfield.send_keys(Keys.RETURN)
+except:
+	driver.close()
+	raise
 
