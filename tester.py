@@ -46,13 +46,21 @@ try:
     passfield.send_keys(auth.pwd)
     passfield.send_keys(Keys.RETURN)
 
-#    driver.find_element_by_xpath('//a[contains(@href,"href")]')
     myappbut = get_element(By.LINK_TEXT, "MY PAD")
     myappbut.click()
-    
-    app = get_element(By.CLASS_NAME, "\"col-12 col-sm-12 col-md-6 col-lg-4 col-xl-3 mb-4 pr-3\"")
-#    app = driver.find_element_by_class_name("col-12 col-sm-12 col-md-6 col-lg-4 col-xl-3 mb-4 pr-3")
-    app.click()
+
+    makeappbut = get_element(By.ID, "create_a_new_app_button")
+    makeappbut.click()
+    namefield = get_element(By.ID, "appcreate_name")
+    namefield.send_keys("auto_test")
+    confbut = get_element(By.ID, "create_app_confirm_button")
+    confbut.click()
+
+    close_docs = get_element(By.LINK_TEXT, "Close")
+    close_docs.click()
+    driver.find_element_by_xpath("//div[@id='pixelpad_nav_topbar']/div[1]/div[1]").click()
+    driver.find_element_by_link_text("IMPORT").click() 
+    driver.find_element_by_id("importProject").click()  
 
 except:
     driver.close()
