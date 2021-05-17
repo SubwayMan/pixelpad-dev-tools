@@ -1,9 +1,11 @@
 import selenium
 from selenium import webdriver
+from selenium.webdriver.common.action_chains import ActionChains
 from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
+
 import time
 import os
 
@@ -24,10 +26,11 @@ except ModuleNotFoundError:
 
 options = webdriver.ChromeOptions()
 options.add_argument("headless")
-
 PATH = "C:\Program Files (x86)\chromedriver.exe" 
 #driver = webdriver.Chrome(PATH, chrome_options=options)
 driver = webdriver.Chrome(PATH)
+actions = ActionChains(driver)
+wait = WebDriverWait(driver, 10)
 
 def get_element(by_type, flag):
     try:
@@ -76,11 +79,11 @@ try:
     except selenium.common.exceptions.NoSuchElementException:
         pass
     
-    driver.implicitly_wait(2)
     print("Running pixelpad file...")
-    driver.find_element_by_id("pp-start").click()
-    driver.implicitly_wait(5)
-    
+    time.sleep(1)
+    wait.until(EC.element_to_be_clickable((By.ID, "pp-start"))).click()
+    time.sleep(2)
+
     outfile = open("out.txt", "w")
     cont = driver.find_element_by_id("output").text
     outfile.write(cont)
@@ -91,24 +94,22 @@ try:
     driver.back()
     driver.implicitly_wait(10)
 
-    flag = True
-    ci = 0
-    while flag:
 
-        flag = False 
-        found_apps = driver.find_elements_by_xpath("//div[@class='col-12 col-sm-12 col-md-6 col-lg-4 col-xl-3 mb-4 pr-3']")
-        print(ci:=ci+1)
-        for fa in found_apps:
-          
-            print(fa.text.split("\n")[0])
-            if fa.text.split("\n")[0] == auth.autoname:
-                flag = True
-                fa.find_element_by_id("dropdownMenuButton").click()
-                fa.find_element_by_xpath("//a[@class='dropdown-item edit-project']").click()
-                driver.find_element_by_id("confirm_delete_button").click()
-                driver.find_element_by_id("pixelpad_shift_delete").click()
-                time.sleep(5)
-                break
+    lastapp = driver.find_element_by_xpath("//div[@class='col-12 col-sm-12 col-md-6 col-lg-4 col-xl-3 mb-4 pr-3']")          
+
+    dropd = lastapp.find_element_by_id("dropdownMenuButton")
+    actions.move_to_element(dropd).perform()
+    dropd.click()
+    editbut = lastapp.find_element_by_xpath("//a[@class='dropdown-item edit-project']")
+    actions.move_to_element(editbut).perform()
+    editbut.click()
+
+    driver.find_element_by_id("confirm_delete_button").click()
+    driver.find_element_by_id("pixelpad_shift_delete").click()
+    time.sleep(5)
+
+    print("Program successfully terminated.")
+    driver.close()
 
 except:
     driver.close()
