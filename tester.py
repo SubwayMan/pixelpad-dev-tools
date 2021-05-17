@@ -15,9 +15,9 @@ except ModuleNotFoundError:
     print("Login details missing. Setting up auth...")
     usern = input("Enter name: ")
     userp = input("Enter password: ")
-
+    autoname = input("Enter a name for the temporary apps. If you have any existing apps with this name, they will be deleted.")
     au = open("auth.py", "w")
-    out = "name = \"" + usern + "\"\npwd = \"" + userp + "\""
+    out = "name = \"" + usern + "\"\npwd = \"" + userp + "\"\nautoname = \"" + autoname + "\""
     au.write(out)
     au.close()
     import auth
@@ -54,7 +54,7 @@ try:
     makeappbut = get_element(By.ID, "create_a_new_app_button")
     makeappbut.click()
     namefield = get_element(By.ID, "appcreate_name")
-    namefield.send_keys("auto_test")
+    namefield.send_keys(auth.autoname)
     confbut = get_element(By.ID, "create_app_confirm_button")
     confbut.click()
 
@@ -75,7 +75,8 @@ try:
 
     except selenium.common.exceptions.NoSuchElementException:
         pass
-
+    
+    driver.implicitly_wait(2)
     print("Running pixelpad file...")
     driver.find_element_by_id("pp-start").click()
     driver.implicitly_wait(5)
@@ -85,6 +86,29 @@ try:
     outfile.write(cont)
     outfile.close()
     print("PixelPad file successfully ran. Output logged.")
+    print("Cleaning up now...")
+    driver.back()
+    driver.back()
+    driver.implicitly_wait(10)
+
+    flag = True
+    ci = 0
+    while flag:
+
+        flag = False 
+        found_apps = driver.find_elements_by_xpath("//div[@class='col-12 col-sm-12 col-md-6 col-lg-4 col-xl-3 mb-4 pr-3']")
+        print(ci:=ci+1)
+        for fa in found_apps:
+          
+            print(fa.text.split("\n")[0])
+            if fa.text.split("\n")[0] == auth.autoname:
+                flag = True
+                fa.find_element_by_id("dropdownMenuButton").click()
+                fa.find_element_by_xpath("//a[@class='dropdown-item edit-project']").click()
+                driver.find_element_by_id("confirm_delete_button").click()
+                driver.find_element_by_id("pixelpad_shift_delete").click()
+                time.sleep(5)
+                break
 
 except:
     driver.close()
