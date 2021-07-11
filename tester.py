@@ -27,8 +27,8 @@ except ModuleNotFoundError:
 options = webdriver.ChromeOptions()
 options.add_argument("headless")
 PATH = "C:\Program Files (x86)\chromedriver.exe" 
-#driver = webdriver.Chrome(PATH, chrome_options=options)
-driver = webdriver.Chrome(PATH)
+driver = webdriver.Chrome(PATH, chrome_options=options)
+#driver = webdriver.Chrome(PATH)
 actions = ActionChains(driver)
 wait = WebDriverWait(driver, 10)
 
