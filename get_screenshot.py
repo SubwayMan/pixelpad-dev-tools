@@ -18,7 +18,7 @@ opt.add_argument('--ignore-certificate-errors')
 opt.add_argument("--test-type")
 
 PATH = "C:\Program Files (x86)\chromedriver.exe" 
-driver = webdriver.Chrome(PATH, chrome_options=opt)
+driver = webdriver.Chrome(PATH, options=opt)
 driver.get(site)
 
 original_size = driver.get_window_size()
@@ -26,18 +26,20 @@ required_width = driver.execute_script('return document.body.parentNode.scrollWi
 required_height = driver.execute_script('return document.body.parentNode.scrollHeight')
 
 driver.set_window_size(required_width, required_height)
-driver.find_element_by_tag_name('body').screenshot("test.png")
 
-#dest = os.path.join(os.getcwd(), "screenshots")
-'''
+dest = os.path.join(os.getcwd(), "screenshots")
+if not os.path.exists(dest):
+    os.mkdir(dest)
+
 id = 1
 while True:
+
     fname = os.path.join(dest, "screenshot"+str(id)+".png")
     if not os.path.exists(fname):
-        driver.save_screenshot(fname)
+        driver.find_element_by_tag_name('body').screenshot(fname)
         break
+
     id += 1
-'''
 
 driver.close()
 
