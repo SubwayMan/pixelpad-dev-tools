@@ -19,13 +19,16 @@ opt.add_argument("--test-type")
 
 PATH = "C:\Program Files (x86)\chromedriver.exe" 
 driver = webdriver.Chrome(PATH, chrome_options=opt)
-actions = ActionChains(driver)
-wait = WebDriverWait(driver, 10)
-
 driver.get(site)
 
-dest = os.path.join(os.getcwd(), "screenshots")
-driver.save_screenshot("test.png")
+original_size = driver.get_window_size()
+required_width = driver.execute_script('return document.body.parentNode.scrollWidth')
+required_height = driver.execute_script('return document.body.parentNode.scrollHeight')
+
+driver.set_window_size(required_width, required_height)
+driver.find_element_by_tag_name('body').screenshot("test.png")
+
+#dest = os.path.join(os.getcwd(), "screenshots")
 '''
 id = 1
 while True:
