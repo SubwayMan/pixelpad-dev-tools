@@ -1,1 +1,3 @@
 WARNING: security: security - Error with Feature-Policy header: Unrecognized feature: 'speaker'. [2485-04-10 01:45:21]
+SEVERE: other: chrome-error://chromewebdata/ - Refused to display 'https://accounts.google.com/' in a frame because it set 'X-Frame-Options' to 'deny'. [2485-04-19 18:20:42]
+SEVERE: other: chrome-error://chromewebdata/ - Refused to display 'https://accounts.google.com/' in a frame because it set 'X-Frame-Options' to 'deny'. [2485-04-19 18:57:48]

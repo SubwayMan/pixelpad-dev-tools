@@ -24,7 +24,9 @@ opt.add_argument("--ignore-certificate-errors")
 opt.add_argument("--test-type")
 opt.add_argument("--disable-gpu")
 
-PATH = "C:\Program Files (x86)\chromedriver.exe" 
+PATH = "/usr/bin/chromedriver" #linux
+#PATH = "C:\Program Files (x86)\chromedriver.exe" #windows 10
+
 driver = webdriver.Chrome(PATH, options=opt, desired_capabilities=dcap)
 driver.get(site)
 
@@ -54,10 +56,14 @@ dat = ""
 if os.path.exists("debug.log"):
     dat = open("debug.log", "r").read()
 
+print("printing console errors...")
 for entry in driver.get_log("browser"):
      log = f'{entry["level"]}: {entry["source"]}: {entry["message"]} [{str(datetime.fromtimestamp(int(entry["timestamp"])//100))}]'
      print(log)
      dat += log+"\n"
+
+print("done!")
+print("writing to file...")
 
 with open("debug.log", "w") as logfile:
     logfile.write(dat)
